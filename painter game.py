@@ -35,7 +35,7 @@ character_speed = 0.5
 #이벤트 루프
 running = True #게임 진행 여부에 대한 변수 True : 게임 진행 중
 while running:
-    dt = clock.tick(10) #초당 프레임 수 fps 설정
+    dt = clock.tick(15) #초당 프레임 수 fps 설정
     for event in pygame.event.get(): #이벤트의 발생 여부에 따른 반복문
         if event.type == pygame.QUIT: #창을 닫는 이벤트 발생했는가?
             running = False
