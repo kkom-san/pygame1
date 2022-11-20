@@ -1,5 +1,5 @@
 import pygame
-
+import random
 pygame.init() #초기화
 
 #화면 크기 설정
@@ -9,8 +9,6 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 
 #화면 타이틀 설정
 pygame. display.set_caption("painter game")
-
-#FPS 설정
 clock = pygame.time.Clock()
 
 #배경 이미지 불러오기
@@ -25,6 +23,19 @@ character_height = character_size[1] #캐릭터 세로 크기
 character_x_pos = (screen_width / 2) - (character_width / 2) #화면 가로 절반의 중간에 위치. 좌우로 움직이기
 character_y_pos = screen_height - character_height #이미지가 화면 세로의 가장 아래 위치
 
+#적캐릭터 불러오기
+monster = pygame.image.load("C:/Users/SEC/Pictures/KakaoTalk_20221120_181613036.jpg")
+monster_size = monster.get_rect().size
+monster_width = monster_size[0]
+monster_height = character_size[1]
+#적캐릭터의 기준 좌표를 x=random y=0 으로 둔다.
+monster_x_pos = random.randint(0, screen_width - monster_width)
+monster_y_pos = 0
+monster_speed = 30
+
+
+start_ticks = pygame.time.get_ticks()
+
 #캐릭터 이동 좌표
 to_x = 0
 to_y = 0
@@ -32,6 +43,9 @@ to_y = 0
 #캐릭터 이동 속도 변수
 character_speed = 0.5
 
+total_time = 60000 #제한시간
+
+game_font = pygame.font.Font(None,40)
 #이벤트 루프
 running = True #게임 진행 여부에 대한 변수 True : 게임 진행 중
 while running:
@@ -58,7 +72,26 @@ while running:
 
     character_x_pos += to_x * dt
     character_y_pos += to_y * dt
-
+    
+    #적캐릭터 떨어지기 설정
+    monster_y_pos += monster_speed
+    monster_speed+=0.05
+    
+    if monster_y_pos > screen_height:
+        monster_y_pos = 0
+        monster_x_pos = random.randint(0, screen_width - monster_width)
+    
+    character_rect = character.get_rect()
+    character_rect.left = character_x_pos
+    character_rect.top = character_y_pos
+    
+    monster_rect = monster.get_rect()
+    monster_rect.left = monster_x_pos
+    monster_rect.top = monster_y_pos
+    
+    if character_rect.colliderect(monster_rect):
+        running = False
+        
     #왼쪽, 오른쪽 경계 정하기
     if character_x_pos < 50:
         character_x_pos = 50
@@ -75,6 +108,19 @@ while running:
 
     screen.blit(background, (0, 0)) #배경에 이미지 그려주고 위치 지정
     screen.blit(character, (character_x_pos, character_y_pos)) #배경에 캐릭터 그려주기
+    screen.blit(monster, (monster_x_pos, monster_y_pos))
+    
+    elapsed_time = (pygame.time.get_ticks() - start_ticks/1000)
+    
+    timer = game_font.render(str(int(total_time - elapsed_time)), True,
+                            (255, 0, 0))
+    screen.blit(timer,(10,10))
+    
+    if total_time - elapsed_time <= 0:
+        print("you win!")
+        running = False
+    
+    
     pygame.display.update()
 
 
