@@ -12,10 +12,10 @@ pygame. display.set_caption("painter game")
 clock = pygame.time.Clock()
 
 #배경 이미지 불러오기
-background = pygame.image.load("C:/Users/SEC/Pictures/화이트보드.jpg")
+background = pygame.image.load("./화이트보드.jpg")
 
 #캐릭터 불러오기
-character = pygame.image.load("C:/Users/SEC/Pictures/내얼굴.png")
+character = pygame.image.load("./내얼굴.png")
 character_size = character.get_rect().size #캐릭터 이미지 사이즈 구하기
 character_width = character_size[0] #캐릭터 가로 크기
 character_height = character_size[1] #캐릭터 세로 크기
@@ -24,7 +24,7 @@ character_x_pos = (screen_width / 2) - (character_width / 2) #화면 가로 절�
 character_y_pos = screen_height - character_height #이미지가 화면 세로의 가장 아래 위치
 
 #적캐릭터 불러오기
-monster = pygame.image.load("C:/Users/SEC/Pictures/KakaoTalk_20221120_181613036.jpg")
+monster = pygame.image.load("./KakaoTalk_20221120_181613036.jpg")
 monster_size = monster.get_rect().size
 monster_width = monster_size[0]
 monster_height = character_size[1]
