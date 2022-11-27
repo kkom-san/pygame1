@@ -1,5 +1,8 @@
 import pygame
 import random
+import time
+
+
 pygame.init() #초기화
 
 #화면 크기 설정
@@ -27,11 +30,21 @@ character_y_pos = screen_height - character_height #이미지가 화면 세로�
 monster = pygame.image.load("./KakaoTalk_20221120_181613036.jpg")
 monster_size = monster.get_rect().size
 monster_width = monster_size[0]
-monster_height = character_size[1]
+monster_height = monster_size[1]
 #적캐릭터의 기준 좌표를 x=random y=0 으로 둔다.
 monster_x_pos = random.randint(0, screen_width - monster_width)
 monster_y_pos = 0
 monster_speed = 30
+
+#아이템 불러오기
+item = pygame.image.load("C:/Users/SEC/Pictures/신속신.jpg")
+item_size = item.get_rect().size
+item_width = item_size[0]
+item_height = item_size[1]
+#아이템의 기준 좌표를 x=random y=0 으로 둔다.
+item_x_pos = random.randint(0, 10000)
+item_y_pos = 0
+item_speed = 10
 
 
 start_ticks = pygame.time.get_ticks()
@@ -43,10 +56,14 @@ to_y = 0
 #캐릭터 이동 속도 변수
 character_speed = 0.5
 
+item_time1 = 55000
+item_time2 = 50000
+
 total_time = 60000 #제한시간
 
 game_font = pygame.font.Font(None,40)
 #이벤트 루프
+num = 0
 running = True #게임 진행 여부에 대한 변수 True : 게임 진행 중
 while running:
     dt = clock.tick(15) #초당 프레임 수 fps 설정
@@ -76,10 +93,21 @@ while running:
     #적캐릭터 떨어지기 설정
     monster_y_pos += monster_speed
     monster_speed+=0.05
-    
+
     if monster_y_pos > screen_height:
         monster_y_pos = 0
         monster_x_pos = random.randint(0, screen_width - monster_width)
+        num +=1
+        
+    
+    if num >= 20:
+        screen.blit(item, (item_x_pos, item_y_pos))
+        item_y_pos += item_speed
+        if item_y_pos > screen_height:
+            time.sleep(10)
+            item_y_pos = 0
+            item_x_pos = random.randint(0, screen_width - monster_width)
+
     
     character_rect = character.get_rect()
     character_rect.left = character_x_pos
@@ -112,9 +140,13 @@ while running:
     
     elapsed_time = (pygame.time.get_ticks() - start_ticks/1000)
     
+
+    
     timer = game_font.render(str(int(total_time - elapsed_time)), True,
                             (255, 0, 0))
     screen.blit(timer,(10,10))
+        
+ 
     
     if total_time - elapsed_time <= 0:
         print("you win!")
