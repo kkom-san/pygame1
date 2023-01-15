@@ -32,19 +32,31 @@ monster_size = monster.get_rect().size
 monster_width = monster_size[0]
 monster_height = monster_size[1]
 #적캐릭터의 기준 좌표를 x=random y=0 으로 둔다.
-monster_x_pos = random.randint(0, screen_width - monster_width)
+monster_x_pos = random.randint(10, screen_width - monster_width)
 monster_y_pos = 0
 monster_speed = 30
 
-# #아이템 불러오기
-# item = pygame.image.load("C:/Users/SEC/Pictures/신속신.jpg")
-# item_size = item.get_rect().size
-# item_width = item_size[0]
-# item_height = item_size[1]
-# #아이템의 기준 좌표를 x=random y=0 으로 둔다.
-# item_x_pos = random.randint(0, 10000)
-# item_y_pos = 0
-# item_speed = 10
+ #신발아이템 불러오기
+item = pygame.image.load("C:/Users/SEC/Pictures/신속신.jpg")
+item_size = item.get_rect().size
+item_width = item_size[0]
+item_height = item_size[1]
+#신발아이템의 기준 좌표를 x=random y=0 으로 둔다.
+item_x_pos = random.randint(0, screen_width - item_width)
+item_y_pos = 0
+item_speed = 10
+
+ #체력아이템 불러오기
+heartitem = pygame.image.load("C:/Users/SEC/san/pygame/체력물약.png")
+heartitem_size = heartitem.get_rect().size
+heartitem_width = heartitem_size[0]
+heartitem_height = heartitem_size[1]
+#아이템의 기준 좌표를 x=random y=0 으로 둔다.
+heartitem_x_pos = random.randint(10, screen_width - heartitem_width)
+heartitem_y_pos = 0
+heartitem_speed = 10
+
+ 
 
 
 start_ticks = pygame.time.get_ticks()
@@ -101,15 +113,6 @@ while running:
         monster_x_pos = random.randint(0, screen_width - monster_width)
         num +=1
     
-    # if num >= 20:
-    #     screen.blit(item, (item_x_pos, item_y_pos))
-    #     item_y_pos += item_speed
-    #     if item_y_pos > screen_height:
-    #         time.sleep(10)
-    #         item_y_pos = 0
-    #         item_x_pos = random.randint(0, screen_width - monster_width)
-
-    
     character_rect = character.get_rect()
     character_rect.left = character_x_pos
     character_rect.top = character_y_pos
@@ -118,10 +121,26 @@ while running:
     monster_rect.left = monster_x_pos
     monster_rect.top = monster_y_pos
     
+    item_rect = item.get_rect()
+    item_rect.left = item_x_pos
+    item_rect.top = item_y_pos
+    
+    heartitem_rect = heartitem.get_rect()
+    heartitem_rect.left = heartitem_x_pos
+    heartitem_rect.top = heartitem_y_pos
+    
     if character_rect.colliderect(monster_rect):
         life -= 1
+        character_speed = 0.5
         if life == 0:
             running = False
+    
+    if character_rect.colliderect(item_rect):
+        character_speed = 1
+        
+    if character_rect.colliderect(heartitem_rect):
+        life = 10
+ 
         
     #왼쪽, 오른쪽 경계 정하기
     if character_x_pos < 50:
@@ -143,9 +162,19 @@ while running:
     
     elapsed_time = (pygame.time.get_ticks() - start_ticks/1000)
     
-    if (elapsed_time < 20000) & (elapsed_time >= 10000):
-        distrupt_box = pygame.draw.rect(screen, color=(255,255,255), rect=[0, 0, 800, 300])
+    # if (elapsed_time < 20000) & (elapsed_time >= 10000):
+    #     distrupt_box = pygame.draw.rect(screen, color=(255,255,255), rect=[0, 0, 800, 300])
     
+    #아이템 설정효과
+    if (elapsed_time <25000) & (elapsed_time >= 19500):
+        screen.blit(item, (item_x_pos, item_y_pos))
+        item_y_pos += item_speed
+        
+             
+    if (elapsed_time <35000) & (elapsed_time >= 29500):
+        screen.blit(heartitem, (heartitem_x_pos, heartitem_y_pos))
+        heartitem_y_pos += heartitem_speed
+        
     guage_message = game_font.render(str(life), True, (255, 0, 0))
     
     screen.blit(guage_message,(10,50))
