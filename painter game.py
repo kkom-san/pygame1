@@ -36,6 +36,17 @@ monster_x_pos = random.randint(10, screen_width - monster_width)
 monster_y_pos = 0
 monster_speed = 30
 
+#적캐릭터 불러오기2
+monster2 = pygame.image.load("C:/Users/SEC/Documents/카카오톡 받은 파일/KakaoTalk_20230122_230652780.jpg")
+monster2_size = monster2.get_rect().size
+monster2_width = monster2_size[0]
+monster2_height = monster2_size[1]
+
+#적캐릭터의 기준 좌표를 x=random y=0 으로 둔다.
+monster2_x_pos = random.randint(10, screen_width - monster2_width)
+monster2_y_pos = 0
+monster2_speed = 30
+
  #신발아이템 불러오기
 item = pygame.image.load("C:/Users/SEC/Pictures/신속신.jpg")
 item_size = item.get_rect().size
@@ -121,6 +132,10 @@ while running:
     monster_rect.left = monster_x_pos
     monster_rect.top = monster_y_pos
     
+    monster2_rect = monster2.get_rect()
+    monster2_rect.left = monster2_x_pos
+    monster2_rect.top = monster2_y_pos
+    
     item_rect = item.get_rect()
     item_rect.left = item_x_pos
     item_rect.top = item_y_pos
@@ -132,6 +147,12 @@ while running:
     if character_rect.colliderect(monster_rect):
         life -= 1
         character_speed = 0.5
+        if life == 0:
+            running = False
+            
+    if character_rect.colliderect(monster2_rect):
+        life -= 2
+        chracter_speed = 2
         if life == 0:
             running = False
     
@@ -174,6 +195,10 @@ while running:
     if (elapsed_time <35000) & (elapsed_time >= 29500):
         screen.blit(heartitem, (heartitem_x_pos, heartitem_y_pos))
         heartitem_y_pos += heartitem_speed
+        
+    if (elapsed_time <40000) & (elapsed_time >= 38000):
+        screen.blit(monster2, (monster2_x_pos, monster2_y_pos))
+        monster2_y_pos += monster2_speed
         
     guage_message = game_font.render(str(life), True, (255, 0, 0))
     
